@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getHomePage, handelUserPage } from "../controller/homeController";
+import { getHomePage, handelUserPage, handleCreateNewUser } from "../controller/homeController";
 
 const router = express.Router();
 
@@ -12,6 +12,8 @@ const initWebRoute = (app) => {
     router.get("/", getHomePage);
 
     router.get("/user", handelUserPage);
+
+    router.post("/users/create-user", handleCreateNewUser);
 
     return app.use("/", router);
 };
