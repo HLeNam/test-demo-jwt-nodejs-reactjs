@@ -16,11 +16,80 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"
         ></script>
+
+        <style>
+            html,
+            body {
+                height: 100%;
+            }
+
+            body {
+                background: linear-gradient(45deg, #49a09d, #5f2c82);
+                color: aliceblue;
+            }
+
+            .table-user {
+                height: 324px;
+
+                position: relative;
+
+                margin: 0;
+                font-family: sans-serif;
+                font-weight: 100;
+
+                margin-top: 10px;
+            }
+
+            .table-container {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                padding-bottom: 20px;
+            }
+            table {
+                border-radius: 12px;
+                width: 800px;
+                border-collapse: collapse;
+                overflow: hidden;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            }
+            th,
+            td {
+                padding: 15px;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: #fff;
+            }
+            th {
+                text-align: left;
+            }
+            thead th {
+                background-color: #55608f;
+            }
+            tbody tr:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+            tbody td {
+                position: relative;
+            }
+            tbody td:hover:before {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: -9999px;
+                bottom: -9999px;
+                background-color: rgba(255, 255, 255, 0.2);
+                z-index: -1;
+            }
+        </style>
     </head>
     <body>
         <div class="user-info-container container">
             <div class="row">
                 <div class="col-12 offset-0 col-lg-6 offset-lg-3">
+                    <div class="mt-3"><h3>Create a new user:</h3></div>
+
                     <form method="POST" action="/users/create-user">
                         <div class="mb-3 mt-3">
                             <label for="email" class="form-label">Email address</label>
@@ -56,6 +125,49 @@
 
                         <button type="submit" class="btn btn-primary w-100">Submit</button>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h3 class="mt-3" style="text-align: center">Table users:</h3>
+            <div class="table-user">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% userList.forEach((user, index) => { %>
+                            <tr>
+                                <td><%= user.id%></td>
+                                <td><%= user.email%></td>
+                                <td><%= user.username%></td>
+                                <td>
+                                    <form
+                                        style="display: inline-block"
+                                        action="/update-user/<%= user.id%>"
+                                        method="POST"
+                                    >
+                                        <button class="btn btn-warning">Edit</button>
+                                    </form>
+                                    <form
+                                        style="display: inline-block"
+                                        action="/delete-user/<%= user.id%>"
+                                        method="POST"
+                                    >
+                                        <button class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
