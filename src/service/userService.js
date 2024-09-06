@@ -29,7 +29,7 @@ const createNewUser = async (email, password, username) => {
 
     const [results, fields] = await connection.execute(
         `
-            INSERT INTO users (email, password, username)
+            INSERT INTO user (email, password, username)
             VALUES (?, ?, ?)
         `,
         [email, hashPassword, username]
@@ -39,7 +39,7 @@ const createNewUser = async (email, password, username) => {
 const getUserList = async () => {
     const [results, fields] = await connection.execute(
         `
-            SELECT * FROM users
+            SELECT * FROM user
         `
     );
 
@@ -51,7 +51,7 @@ const getUserList = async () => {
 const deleteUser = async (id) => {
     const [results, fields] = await connection.execute(
         `
-            DELETE FROM users
+            DELETE FROM user
             WHERE id = ?
         `,
         [id]
@@ -63,7 +63,7 @@ const deleteUser = async (id) => {
 const getUserById = async (id) => {
     const [results, fields] = await connection.execute(
         `
-            SELECT * FROM users
+            SELECT * FROM user
             WHERE id = ?
         `,
         [id]
@@ -81,7 +81,7 @@ const getUserById = async (id) => {
 const updateUserInfo = async (email, username, id) => {
     const [results, fields] = await connection.execute(
         `
-            UPDATE users
+            UPDATE user
             SET email = ?, username = ?
             WHERE id = ?
         `,

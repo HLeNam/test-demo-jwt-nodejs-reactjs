@@ -4,8 +4,13 @@ import express from "express";
 import configViewEngine from "./config/viewEngine";
 import initWebRoute from "./routes/web";
 
+import connection from "./config/connectDB";
+
 const app = express();
 const PORT = process.env.PORT || 8081;
+
+// test connection db
+connection();
 
 // config view engine
 configViewEngine(app);
