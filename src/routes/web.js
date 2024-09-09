@@ -9,6 +9,8 @@ import {
     handleUpdateUser,
 } from "../controller/homeController";
 
+import { testApi } from "../controller/apiController";
+
 const router = express.Router();
 
 /**
@@ -27,6 +29,10 @@ const initWebRoute = (app) => {
     router.post("/update-user/:id", getUpdateUserPage);
 
     router.post("/users/update-user", handleUpdateUser);
+
+    // rest api
+    // GET - R, POST - C, PUT - U, DELETE - D
+    router.get("/api/test-api", testApi);
 
     return app.use("/", router);
 };
