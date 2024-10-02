@@ -11,6 +11,11 @@ const getHomePage = (req, res) => {
 };
 
 const handelUserPage = async (req, res) => {
+    // Cookies that have not been signed
+    // console.log("Cookies: ", req.cookies);
+
+    // res.cookie("test", "test cookie");
+
     const userList = await getUserList();
 
     return res.render("user.ejs", { userList });

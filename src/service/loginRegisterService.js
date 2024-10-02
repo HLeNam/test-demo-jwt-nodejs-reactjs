@@ -1,8 +1,12 @@
+require("dotenv").config();
+
 import db from "../models";
 
 import { Op } from "sequelize";
 
 import bcrypt from "bcryptjs";
+import { getGroupWithRoles } from "./JWTService";
+import { createJWT } from "../middleware/JWTAction";
 const salt = bcrypt.genSaltSync(10);
 
 const hashUserPassword = (userPassword) => {
@@ -70,6 +74,7 @@ const registerNewUser = async (rawUserData) => {
             username: rawUserData.username,
             password: hashPassword,
             phone: rawUserData.phone,
+            groupId: 4,
         });
 
         return {
@@ -106,24 +111,40 @@ const handleLoginUser = async (rawData) => {
         });
 
         if (user) {
-            console.log(">>> Found user with email/phone");
+            // console.log(">>> Found user with email/phone");
             let isCorrectPassword = checkPassword(rawData.password, user.password);
 
             if (isCorrectPassword === true) {
+                // test roles
+                let groupWithRoles = await getGroupWithRoles(user);
+
+                let payload = {
+                    email: user.email,
+                    groupWithRoles,
+                    username: user.username,
+                };
+
+                let token = createJWT(payload);
+
                 return {
                     EM: "Ok",
                     EC: 0,
-                    DT: "",
+                    DT: {
+                        access_token: token,
+                        groupWithRoles,
+                        email: user.email,
+                        username: user.username,
+                    },
                 };
             }
         }
 
-        console.log(
-            ">>> Not found user with email/phone:",
-            rawData.valueLogin,
-            " password:",
-            rawData.password
-        );
+        // console.log(
+        //     ">>> Not found user with email/phone:",
+        //     rawData.valueLogin,
+        //     " password:",
+        //     rawData.password
+        // );
         return {
             EM: "Your email or phone number or password is incorrect!",
             EC: 1,
@@ -154,4 +175,4 @@ const handleLoginUser = async (rawData) => {
     }
 };
 
-export { registerNewUser, handleLoginUser };
+export { registerNewUser, handleLoginUser, hashUserPassword, checkEmailExist, checkPhoneExist };
